@@ -16,9 +16,9 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title mb-0">Kategori</h5>
+                <h5 class="card-title mb-0">Kategori Pelanggaran</h5>
 
-                <a href="{{ url('master/kategori/tambah') }}" class="btn btn-primary">
+                <a href="{{ url('master/kategoripelanggaran/tambah') }}" class="btn btn-primary">
                     <i class="mdi mdi-plus"></i> Tambah Data
                 </a>
             </div>
@@ -27,7 +27,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Kategori</th>
+                            <th>Kategori Pelanggaran</th>
                             <th>Keterangan</th>
                             <th>Status</th>
                             <th></th>
@@ -37,7 +37,7 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($kategori as $item)
+                        @foreach ($kategoripelanggaran as $item)
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $item->nama }}</td>
@@ -51,17 +51,17 @@
                                 </td>
                                 <td>
                                     @if ($item->status == 0)
-                                        <a href="{{ url('master/kategori/status/' . encrypt($item->id) . '/1') }}"
+                                        <a href="{{ url('master/kategoripelanggaran/status/' . encrypt($item->id) . '/1') }}"
                                             class="btn btn-success btn-sm" title="Aktifkan"><i
                                                 class="me-2 mdi mdi-check">Aktifkan</i></a>
                                     @else
-                                        <a href="{{ url('master/kategori/status/' . encrypt($item->id) . '/0') }}"
+                                        <a href="{{ url('master/kategoripelanggaran/status/' . encrypt($item->id) . '/0') }}"
                                             class="btn btn-danger btn-sm" title="Non Aktifkan"><i
                                                 class="me-2 mdi mdi-close">Non Aktifkan</i></a>
                                     @endif
-                                    <a href="{{ url('master/kategori/edit/' . encrypt($item->id)) }}"
+                                    <a href="{{ url('master/kategoripelanggaran/edit/' . encrypt($item->id)) }}"
                                         class="btn btn-warning btn-sm"><i class="me-2 mdi mdi-table-edit">Edit</i></a>
-                                    <a href="{{ url('master/kategori/hapus/' . encrypt($item->id)) }}"
+                                    <a href="{{ url('master/kategoripelanggaran/hapus/' . encrypt($item->id)) }}"
                                         class="btn btn-danger btn-sm"><i class="me-2 mdi mdi-delete">Hapus</i></a>
                                 </td>
                             </tr>
