@@ -4,8 +4,10 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\BiodataController;
+use App\Http\Controllers\Master\JabatanController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\KategoriPelanggaranController;
+use App\Http\Controllers\Master\PangkatController;
 use App\Http\Controllers\Master\PelanggaranController;
 use App\Http\Controllers\Master\PenggunaController;
 use App\Http\Controllers\Master\RoleController;
@@ -73,6 +75,22 @@ Route::middleware('checklogin')->group(
                 Route::get('edit/{id}', [RoleController::class, 'edit']);
                 Route::get('hapus/{id}', [RoleController::class, 'hapus']);
                 Route::get('status/{id}/{stat}', [RoleController::class, 'status']);
+            });
+            Route::prefix('jabatan')->group(function () {
+                Route::get('index', [JabatanController::class, 'index']);
+                Route::get('tambah', [JabatanController::class, 'tambah']);
+                Route::post('action', [JabatanController::class, 'action']);
+                Route::get('edit/{id}', [JabatanController::class, 'edit']);
+                Route::get('hapus/{id}', [JabatanController::class, 'hapus']);
+                Route::get('status/{id}/{stat}', [JabatanController::class, 'status']);
+            });
+            Route::prefix('pangkat')->group(function () {
+                Route::get('index', [PangkatController::class, 'index']);
+                Route::get('tambah', [PangkatController::class, 'tambah']);
+                Route::post('action', [PangkatController::class, 'action']);
+                Route::get('edit/{id}', [PangkatController::class, 'edit']);
+                Route::get('hapus/{id}', [PangkatController::class, 'hapus']);
+                Route::get('status/{id}/{stat}', [PangkatController::class, 'status']);
             });
             Route::prefix('pengguna')->group(function () {
                 Route::get('index', [PenggunaController::class, 'index']);
