@@ -47,6 +47,17 @@
                     <div class="form-group row">
                         <label class="col-sm-3 text-end control-label col-form-label">Jabatan</label>
                         <div class="col-sm-9">
+                            <select class="form-control" name="id_role">
+                                <option value="">-- Pilih Hak Akses --</option>
+                                @foreach ($role as $k)
+                                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{-- <div class="form-group row">
+                        <label class="col-sm-3 text-end control-label col-form-label">Jabatan</label>
+                        <div class="col-sm-9">
                             <select class="form-control" name="id_jabatan">
                                 <option value="">-- Pilih Jabatan --</option>
                                 @foreach ($jabatan as $k)
@@ -54,7 +65,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label for="fname" class="col-sm-3 text-end control-label col-form-label">HP</label>
                         <div class="col-sm-9">
@@ -93,17 +104,6 @@
                                     Lihat Password
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 text-end control-label col-form-label">Hak Akses</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" name="id_role">
-                                <option value="">-- Pilih Hak Akses --</option>
-                                @foreach ($role as $k)
-                                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                 </div>

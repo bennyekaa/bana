@@ -21,7 +21,11 @@ class PenggunaController extends Controller
         session()->put('pengguna', url()->full());
         $data['menu'] = 'Pengguna';
         $data['breadcrumb'] = 'Pengguna';
-        $data['pengguna'] = Pengguna::with('role')->get();
+        $data['pengguna'] = Pengguna::with('role')
+            ->whereHas('role', function ($q) {
+                $q->where('nama', '!=', 'developer');
+            })
+            ->get();
         return view('page.master.pengguna.index', $data);
     }
 
@@ -43,7 +47,7 @@ class PenggunaController extends Controller
         $data['role'] = Role::where('nama', '<>', 'Developer')
             ->where('status', '<>', 0)
             ->get();
-
+        // dd($data);
         return view('page.master.pengguna.edit', $data);
     }
 
@@ -103,10 +107,10 @@ class PenggunaController extends Controller
 
             DB::transaction(function () use ($request) {
 
-                $pengguna = Pengguna::find(decrypt($request->id));
-                $biodata = Biodata::find($pengguna->id_biodata);
+                $pengguna = Pengguna::findOrFail(decrypt($request->id));
+                $biodata = Biodata::findOrFail($pengguna->id_biodata);
 
-                // update biodata
+                //  update biodata
                 $biodata->update([
                     'nrp' => $request->nrp,
                     'gelar_depan' => $request->gelar_depan,
@@ -118,14 +122,21 @@ class PenggunaController extends Controller
                     'alamat' => $request->alamat,
                 ]);
 
-                // update pengguna
+                // update PIN jika diisi
+                if (!empty($request->pin)) {
+                    $biodata->update([
+                        'pin' => hash('sha256', $request->pin)
+                    ]);
+                }
+
+                //  update pengguna
                 $pengguna->update([
                     'username' => $request->username,
                     'id_role' => $request->id_role,
                 ]);
 
-                // update password kalau diisi
-                if ($request->password) {
+                // update password jika diisi
+                if (!empty($request->password)) {
                     $pengguna->update([
                         'password' => Hash::make($request->password)
                     ]);

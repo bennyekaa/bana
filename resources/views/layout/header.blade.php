@@ -13,7 +13,7 @@
                 <!--End Logo icon -->
                 <!-- Logo text -->
                 <span class="logo-text ms-2">
-                    <span style="font-size:15px;font-weight:700;color:#ffffff;letter-spacing:1px;">E-PELANGGARAN</span>
+                    <span style="font-size:15px;font-weight:700;color:#ffffff;letter-spacing:1px;">E-PIDANA</span>
                 </span>
                 <!-- Logo icon -->
                 <!-- <b class="logo-icon"> -->
