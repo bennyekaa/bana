@@ -85,23 +85,23 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-end control-label col-form-label">Pin (6 Digit)</label>
+                        <label class="col-sm-3 text-end control-label col-form-label">Password (6 Digit)</label>
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input type="password" class="form-control" name="pin" id="pin"
                                     inputmode="numeric" maxlength="6" pattern="[0-9]*" placeholder="Masukkan PIN">
-                                <span class="input-group-text" id="togglePin">Lihat PIN</span>
+                                <span class="input-group-text" id="togglePin">Lihat Password</span>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-end control-label col-form-label">Password</label>
+                        <label class="col-sm-3 text-end control-label col-form-label">Pin</label>
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input type="password" class="form-control" name="password" id="password"
                                     placeholder="Masukkan Password">
                                 <span class="input-group-text" id="togglePassword" style="cursor:pointer;">
-                                    Lihat Password
+                                    Lihat Pin
                                 </span>
                             </div>
                         </div>

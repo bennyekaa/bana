@@ -44,7 +44,7 @@
                         </ul>
             </li>
             @endif
-            @if (session()->get('role.nama') != 'Developer' && session()->get('role.nama') != 'Admin')
+            @if (session()->get('role.nama') != 'Developer')
             <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark"
                 href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span
                 class="hide-menu">Transaksi </span></a>
