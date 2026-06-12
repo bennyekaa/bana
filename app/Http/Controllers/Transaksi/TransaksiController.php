@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Agama;
 use App\Models\Catatan;
 use App\Models\Foto;
+use App\Models\PdfPenyidikan;
 use App\Models\Pelanggaran;
 use App\Models\Pelaporan;
 use App\Models\Pengguna;
@@ -100,11 +101,17 @@ class TransaksiController extends Controller
 
     public function detail($id)
     {
+        // $lp = Pelaporan::with([
+        //     'pelanggaran.kategori_pelanggaran',
+        //     'menerima.biodata',
+        //     'foto',
+        //     'catatan'
+        // ])->find($id);
         $lp = Pelaporan::with([
             'pelanggaran.kategori_pelanggaran',
             'menerima.biodata',
             'foto',
-            'catatan'
+            'pdf'
         ])->find($id);
 
         return view('page.transaksi.lp.detail', compact('lp'));
@@ -156,55 +163,156 @@ class TransaksiController extends Controller
         return redirect('transaksi/lp/detail/' . $id);
     }
 
+    // public function upload(Request $request, $id)
+    // {
+    //     $lp = Pelaporan::find($id);
+
+    //     $key = hash('sha256', 'secret_key', true);
+
+    //     $path = storage_path('app/private');
+    //     if (!file_exists($path)) {
+    //         mkdir($path, 0777, true);
+    //     }
+
+    //     //  SIMPAN FOTO
+    //     if ($request->hasFile('foto')) {
+    //         foreach ($request->file('foto') as $file) {
+
+    //             $data = file_get_contents($file);
+    //             $iv = random_bytes(16);
+
+    //             $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+
+    //             $nama = Str::random(20) . '.enc';
+
+    //             //  PAKAI PATH YANG SUDAH DIBUAT
+    //             file_put_contents($path . '/' . $nama, $iv . $encrypted);
+
+    //             Foto::create([
+    //                 'id_lp' => $id,
+    //                 'file' => $nama,
+    //                 'created_by' => session()->get('username')
+    //             ]);
+    //         }
+    //     }
+
+    //     //  SIMPAN CATATAN
+    //     foreach ($request->pertanyaan as $i => $p) {
+    //         if ($p) {
+    //             Catatan::create([
+    //                 'id_lp' => $id,
+    //                 'pertanyaan' => $p,
+    //                 'jawaban' => $request->jawaban[$i],
+    //                 'created_by' => session()->get('username')
+    //             ]);
+    //         }
+    //     }
+
+    //     $lp->status = 2;
+    //     $lp->save();
+
+    //     return redirect()->back()->with('success', 'Berhasil dikirim');
+    // }
+
     public function upload(Request $request, $id)
     {
-        $lp = Pelaporan::find($id);
+        $lp = Pelaporan::findOrFail($id);
 
         $key = hash('sha256', 'secret_key', true);
 
         $path = storage_path('app/private');
+
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
 
-        //  SIMPAN FOTO
+        /*
+    |--------------------------------------------------------------------------
+    | UPLOAD FOTO
+    |--------------------------------------------------------------------------
+    */
+
         if ($request->hasFile('foto')) {
+
             foreach ($request->file('foto') as $file) {
 
                 $data = file_get_contents($file);
+
                 $iv = random_bytes(16);
 
-                $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+                $encrypted = openssl_encrypt(
+                    $data,
+                    'AES-256-CBC',
+                    $key,
+                    OPENSSL_RAW_DATA,
+                    $iv
+                );
 
                 $nama = Str::random(20) . '.enc';
 
-                //  PAKAI PATH YANG SUDAH DIBUAT
-                file_put_contents($path . '/' . $nama, $iv . $encrypted);
+                file_put_contents(
+                    $path . '/' . $nama,
+                    $iv . $encrypted
+                );
 
                 Foto::create([
                     'id_lp' => $id,
                     'file' => $nama,
-                    'created_by' => session()->get('username')
+                    'created_by' => session('username')
                 ]);
             }
         }
 
-        //  SIMPAN CATATAN
-        foreach ($request->pertanyaan as $i => $p) {
-            if ($p) {
-                Catatan::create([
+        /*
+    |--------------------------------------------------------------------------
+    | UPLOAD PDF
+    |--------------------------------------------------------------------------
+    */
+
+        if ($request->hasFile('pdf')) {
+
+            foreach ($request->file('pdf') as $file) {
+
+                $data = file_get_contents($file);
+
+                $iv = random_bytes(16);
+
+                $encrypted = openssl_encrypt(
+                    $data,
+                    'AES-256-CBC',
+                    $key,
+                    OPENSSL_RAW_DATA,
+                    $iv
+                );
+
+                $nama = Str::random(20) . '.pdf.enc';
+
+                file_put_contents(
+                    $path . '/' . $nama,
+                    $iv . $encrypted
+                );
+
+                PdfPenyidikan::create([
                     'id_lp' => $id,
-                    'pertanyaan' => $p,
-                    'jawaban' => $request->jawaban[$i],
-                    'created_by' => session()->get('username')
+                    'file' => $nama,
+                    'created_by' => session('username')
                 ]);
             }
         }
+
+        /*
+    |--------------------------------------------------------------------------
+    | UPDATE STATUS
+    |--------------------------------------------------------------------------
+    */
 
         $lp->status = 2;
         $lp->save();
 
-        return redirect()->back()->with('success', 'Berhasil dikirim');
+        return redirect()->back()->with(
+            'success',
+            'Berhasil dikirim'
+        );
     }
 
     public function lihatGambar($file)
@@ -221,5 +329,33 @@ class TransaksiController extends Controller
         $decrypted = openssl_decrypt($encrypted, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
 
         return response($decrypted)->header('Content-Type', 'image/jpeg');
+    }
+
+    public function lihatPdf($file)
+    {
+        $path = storage_path('app/private/' . $file);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        $data = file_get_contents($path);
+
+        $iv = substr($data, 0, 16);
+        $encrypted = substr($data, 16);
+
+        $key = hash('sha256', 'secret_key', true);
+
+        $pdf = openssl_decrypt(
+            $encrypted,
+            'AES-256-CBC',
+            $key,
+            OPENSSL_RAW_DATA,
+            $iv
+        );
+
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline');
     }
 }

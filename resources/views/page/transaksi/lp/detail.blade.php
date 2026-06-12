@@ -62,7 +62,7 @@
             @endif
 
             <!-- CATATAN -->
-            @if ($lp->catatan->count())
+            {{-- @if ($lp->catatan->count())
                 <h5 class="mt-4">Catatan Penyidikan</h5>
 
                 <table class="table table-bordered">
@@ -77,6 +77,34 @@
                             <tr>
                                 <td><b>{{ $c->pertanyaan }}</b></td>
                                 <td>{{ $c->jawaban }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif --}}
+
+            @if ($lp->pdf->count())
+                <h5 class="mt-4">Dokumen Hasil Penyidikan</h5>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="50">No</th>
+                            <th>Dokumen</th>
+                            <th width="150">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($lp->pdf as $key => $p)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>Dokumen Penyidikan {{ $key + 1 }}</td>
+                                <td>
+                                    <a href="{{ url('transaksi/lp/pdf/' . $p->file) }}" target="_blank"
+                                        class="btn btn-danger btn-sm">
+                                        Lihat PDF
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -115,6 +115,7 @@ Route::middleware('checklogin')->group(
                 Route::post('upload/{id}', [TransaksiController::class, 'upload']);
                 Route::post('cek-pin/{id}', [TransaksiController::class, 'cekpin']);
                 Route::get('gambar/{file}', [TransaksiController::class, 'lihatGambar']);
+                Route::get('pdf/{file}',[TransaksiController::class, 'lihatPdf']);
             });
         });
 

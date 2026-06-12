@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-body">
 
-            <h4 class="card-title">Upload Bukti & Catatan Penyidikan</h4>
+            <h4 class="card-title">Upload Bukti & Dokumen Penyidikan</h4>
 
             <form action="{{ url('transaksi/lp/upload/' . $lp->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- CATATAN DINAMIS -->
-                <label>Catatan Penyidikan</label>
+                {{-- <label>Catatan Penyidikan</label>
                 <div id="catatan-wrapper">
                     <div class="row mb-2">
                         <div class="col-md-5">
@@ -36,7 +36,12 @@
 
                 <button type="button" class="btn btn-info mb-3" onclick="tambahCatatan()">+ Tambah Catatan</button>
 
-                <br>
+                <br> --}}
+
+                <div class="form-group mb-3">
+                    <label>Upload Hasil Penyidikan (PDF)</label>
+                    <input type="file" name="pdf[]" multiple accept=".pdf" class="form-control">
+                </div>
 
                 <button type="submit" class="btn btn-success">Kirim ke Kasi / Komandan</button>
                 <a href="{{ session('lp') }}" class="btn btn-secondary">Kembali</a>
@@ -46,7 +51,7 @@
     </div>
 @endsection
 
-@section('tambahanjs')
+{{-- @section('tambahanjs')
     <script>
         function tambahCatatan() {
             let html = `
@@ -68,4 +73,4 @@
             btn.closest('.row').remove();
         }
     </script>
-@endsection
+@endsection --}}

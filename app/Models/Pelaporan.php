@@ -34,4 +34,9 @@ class Pelaporan extends Model
     {
         return $this->hasMany(Foto::class, "id_lp", "id");
     }
+
+    public function pdf()
+    {
+        return $this->hasMany(PdfPenyidikan::class, 'id_lp');
+    }
 }
